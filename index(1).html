@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SHIFT Founder Box Checkout</title>
+  <script src="https://www.paypal.com/sdk/js?client-id=BAADZCDjFjKldGAp5tElxhPSVojAVylL-u-RANue8zIhSNpW5UVPlsbtiQ6Wr_kkNIj27W1HpnjlRYR94I&currency=USD&intent=capture"></script>
+  <style>
+    :root{--green:#1f9f4a;--ink:#111;--muted:#686868;--line:#d9d7d1;--soft:#f7f6f2;--white:#fff}
+    *{box-sizing:border-box}html,body{margin:0;padding:0;background:transparent;color:var(--ink);font-family:Arial,Helvetica,sans-serif}body{padding:8px}
+    .shell{width:min(100%,900px);margin:0 auto}.card,.purchase,.checkout{background:var(--white);border:1px solid var(--line);border-radius:24px;padding:24px}
+    .eyebrow{display:inline-flex;margin-bottom:10px;padding:7px 11px;border-radius:999px;background:var(--soft);font-size:12px;font-weight:700;letter-spacing:.11em;text-transform:uppercase}
+    h1{margin:0;font-size:clamp(26px,4vw,42px);line-height:1.05;letter-spacing:-.035em}.sub{margin:12px 0 0;max-width:700px;color:var(--muted);font-size:16px;line-height:1.55}
+    .details{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px}.detail{min-height:82px;padding:15px;border:1px solid var(--line);border-radius:16px;background:var(--soft)}.detail strong{display:block;margin-bottom:5px;font-size:14px}.detail span{color:var(--muted);font-size:13px;line-height:1.4}
+    .purchase{margin-top:18px;padding:18px;border-radius:20px}.price-row{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:16px}.price-label{color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:.08em;font-weight:700}.price{margin-top:3px;font-size:34px;font-weight:800}.availability{text-align:right;font-size:13px;color:var(--muted)}.availability strong{display:block;margin-top:4px;color:var(--ink);font-size:15px}
+    .purchase-row{display:grid;grid-template-columns:260px 1fr;gap:12px}.qty{min-height:66px;border:2px solid var(--ink);border-radius:999px;display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;background:var(--soft);overflow:hidden}.qty button{height:100%;border:0;background:transparent;color:var(--ink);font-size:32px;cursor:pointer}.qty button:hover{background:rgba(0,0,0,.05)}#quantity{text-align:center;font-size:23px;font-weight:800}
+    .reserve{min-height:66px;width:100%;border:0;border-radius:999px;padding:14px 22px;background:var(--green);color:#fff;font-size:21px;font-weight:800;cursor:pointer}.reserve:hover{filter:brightness(.95)}
+    .summary{display:flex;justify-content:space-between;gap:12px;margin-top:13px;color:var(--muted);font-size:14px}.summary strong{color:var(--ink)}.trust{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin-top:15px;color:var(--muted);font-size:12px}
+    .checkout{display:none;margin-top:18px;padding:20px;border-radius:20px}.checkout.open{display:block;animation:reveal .25s ease-out}@keyframes reveal{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+    .checkout h2{margin:0 0 7px;text-align:center;font-size:21px}.panel-copy{margin:0 0 16px;text-align:center;color:var(--muted);font-size:13px}#status{min-height:22px;margin-top:12px;text-align:center;color:var(--muted);font-size:14px}.terms{margin:13px 0 0;text-align:center;color:var(--muted);font-size:11px;line-height:1.5}
+    @media(max-width:700px){body{padding:4px}.card,.purchase,.checkout{padding:17px;border-radius:18px}.details{grid-template-columns:1fr}.purchase-row{grid-template-columns:1fr}.price-row{align-items:flex-start}.qty,.reserve{min-height:60px}}
+  </style>
+</head>
+<body>
+<main class="shell">
+  <section class="card">
+    <div class="eyebrow">Founder Edition</div>
+    <h1>Be part of the first 250.</h1>
+    <p class="sub">Reserve the original SHIFT Essential Founder Box and help launch a new way to purchase everyday essentials with greater purpose.</p>
+    <div class="details">
+      <div class="detail"><strong>Limited Release</strong><span>Only 250 Founder Boxes will be offered in the first launch.</span></div>
+      <div class="detail"><strong>Local Delivery</strong><span>Free local delivery in the Philadelphia area.</span></div>
+      <div class="detail"><strong>Fulfillment Timing</strong><span>Ships or delivers in approximately 4–6 weeks.</span></div>
+    </div>
+  </section>
+  <section class="purchase">
+    <div class="price-row"><div><div class="price-label">Founder Box</div><div class="price">$99</div></div><div class="availability">Original launch<strong>250 boxes total</strong></div></div>
+    <div class="purchase-row">
+      <div class="qty"><button id="decrease" type="button">−</button><span id="quantity">1</span><button id="increase" type="button">+</button></div>
+      <button id="reserve-button" class="reserve" type="button">Reserve Founder Box</button>
+    </div>
+    <div class="summary"><span><strong id="box-label">1 Founder Box</strong></span><span>Total: <strong id="total">$99.00</strong></span></div>
+    <div class="trust"><span>Secure checkout</span><span>Free Philadelphia-area delivery</span><span>Approximately 4–6 weeks</span></div>
+  </section>
+  <section id="checkout-panel" class="checkout" aria-hidden="true">
+    <h2>Complete your secure checkout</h2>
+    <p class="panel-copy">Pay with PayPal, Pay Later, or a debit or credit card.</p>
+    <div id="paypal-button-container"></div><div id="status"></div>
+    <p class="terms">By placing an order, you acknowledge that this is a limited Founder Edition preorder expected to ship or be delivered in approximately 4–6 weeks.</p>
+  </section>
+</main>
+<script>
+const UNIT_PRICE=99.00,MIN_QUANTITY=1,MAX_QUANTITY=5;let quantity=1,paypalRendered=false;
+const quantityDisplay=document.getElementById('quantity'),totalDisplay=document.getElementById('total'),boxLabel=document.getElementById('box-label'),checkoutPanel=document.getElementById('checkout-panel'),status=document.getElementById('status'),reserveButton=document.getElementById('reserve-button');
+function money(v){return new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(v)}
+function updateDisplay(){quantityDisplay.textContent=quantity;totalDisplay.textContent=money(quantity*UNIT_PRICE);boxLabel.textContent=quantity===1?'1 Founder Box':`${quantity} Founder Boxes`}
+document.getElementById('decrease').addEventListener('click',()=>{quantity=Math.max(MIN_QUANTITY,quantity-1);updateDisplay()});
+document.getElementById('increase').addEventListener('click',()=>{quantity=Math.min(MAX_QUANTITY,quantity+1);updateDisplay()});
+reserveButton.addEventListener('click',()=>{checkoutPanel.classList.add('open');checkoutPanel.setAttribute('aria-hidden','false');renderPayPal();setTimeout(()=>checkoutPanel.scrollIntoView({behavior:'smooth',block:'nearest'}),80)});
+function renderPayPal(){if(paypalRendered)return;if(typeof paypal==='undefined'){status.textContent='PayPal could not load. Confirm that YOUR_PAYPAL_CLIENT_ID was replaced in the file.';return}paypalRendered=true;paypal.Buttons({style:{layout:'vertical',shape:'pill',label:'paypal'},createOrder(data,actions){const q=quantity,total=(UNIT_PRICE*q).toFixed(2);return actions.order.create({purchase_units:[{description:`SHIFT Essential Founder Box × ${q}`,amount:{currency_code:'USD',value:total,breakdown:{item_total:{currency_code:'USD',value:total}}},items:[{name:'SHIFT Essential Founder Box',description:'Limited Founder Edition preorder',unit_amount:{currency_code:'USD',value:UNIT_PRICE.toFixed(2)},quantity:String(q),category:'PHYSICAL_GOODS'}]}],application_context:{shipping_preference:'GET_FROM_FILE'}})},onApprove(data,actions){status.textContent='Processing your order…';return actions.order.capture().then(details=>{const firstName=details?.payer?.name?.given_name||'Founder';status.innerHTML=`<strong>Thank you, ${firstName}.</strong> Your payment was completed.`;reserveButton.disabled=true;reserveButton.textContent='Order Completed'})},onCancel(){status.textContent='Checkout was canceled. Your selected quantity is still saved.'},onError(error){console.error(error);status.textContent='Checkout could not be completed. Please try again.'}}).render('#paypal-button-container')}
+updateDisplay();
+</script>
+</body>
+</html>
