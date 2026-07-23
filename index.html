@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SHIFT Founder Box Checkout</title>
+
+  <!-- Replace YOUR_PAYPAL_CLIENT_ID before publishing -->
+  <script src="https://www.paypal.com/sdk/js?client-id=BAADZCDjFjKldGAp5tElxhPSVojAVylL-u-RANue8zIhSNpW5UVPlsbtiQ6Wr_kkNIj27W1HpnjlRYR94I&currency=USD&intent=capture"></script>
+
+  <style>
+    :root {
+      --shift-green: #1fa34a;
+      --ink: #111111;
+      --soft: #f4f3ef;
+      --line: #c9c7c0;
+      --muted: #64635f;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .checkout-card {
+      width: min(100%, 760px);
+      margin: 0 auto;
+      padding: 18px 12px 14px;
+    }
+
+    .purchase-row {
+      display: grid;
+      grid-template-columns: minmax(190px, 280px) 1fr;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .quantity-control {
+      min-height: 68px;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: center;
+      background: var(--soft);
+      overflow: hidden;
+    }
+
+    .quantity-control button {
+      height: 100%;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      font-size: 34px;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .quantity-control button:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .quantity-control button:focus-visible,
+    .checkout-button:focus-visible {
+      outline: 3px solid rgba(31, 163, 74, 0.35);
+      outline-offset: 3px;
+    }
+
+    #quantity {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .checkout-button {
+      min-height: 68px;
+      width: 100%;
+      border: 0;
+      border-radius: 999px;
+      padding: 16px 24px;
+      background: var(--shift-green);
+      color: white;
+      font-size: 23px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .checkout-button:hover {
+      filter: brightness(0.94);
+    }
+
+    .summary {
+      margin-top: 13px;
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .summary strong {
+      color: var(--ink);
+    }
+
+    #paypal-panel {
+      display: none;
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: white;
+    }
+
+    #paypal-panel.open {
+      display: block;
+    }
+
+    .panel-title {
+      margin: 0 0 12px;
+      font-size: 18px;
+      text-align: center;
+    }
+
+    #status {
+      min-height: 22px;
+      margin-top: 12px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .fine-print {
+      margin: 10px 0 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 580px) {
+      .checkout-card { padding-inline: 6px; }
+
+      .purchase-row {
+        grid-template-columns: 1fr;
+      }
+
+      .quantity-control,
+      .checkout-button {
+        min-height: 62px;
+      }
+
+      .summary {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 5px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="checkout-card">
+    <div class="purchase-row">
+      <div class="quantity-control" aria-label="Choose Founder Box quantity">
+        <button id="decrease" type="button" aria-label="Decrease quantity">−</button>
+        <span id="quantity" aria-live="polite">1</span>
+        <button id="increase" type="button" aria-label="Increase quantity">+</button>
+      </div>
+
+      <button id="continue-button" class="checkout-button" type="button">
+        Reserve Founder Box
+      </button>
+    </div>
+
+    <div class="summary">
+      <span><strong id="box-label">1 Founder Box</strong></span>
+      <span>Total: <strong id="total">$99.00</strong></span>
+    </div>
+
+    <section id="paypal-panel" aria-hidden="true">
+      <h2 class="panel-title">Complete your secure checkout</h2>
+      <div id="paypal-button-container"></div>
+      <div id="status" role="status" aria-live="polite"></div>
+      <p class="fine-print">
+        Expected shipping: approximately 4–6 weeks. By placing an order,
+        you agree to the preorder, shipping, refund, and privacy terms shown on the SHIFT website.
+      </p>
+    </section>
+  </main>
+
+  <script>
+    const UNIT_PRICE = 99.00;
+    const MIN_QUANTITY = 1;
+    const MAX_QUANTITY = 5;
+
+    let quantity = 1;
+    let paypalRendered = false;
+
+    const quantityDisplay = document.getElementById("quantity");
+    const totalDisplay = document.getElementById("total");
+    const boxLabel = document.getElementById("box-label");
+    const panel = document.getElementById("paypal-panel");
+    const status = document.getElementById("status");
+
+    function money(value) {
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD"
+      }).format(value);
+    }
+
+    function updateDisplay() {
+      quantityDisplay.textContent = quantity;
+      totalDisplay.textContent = money(quantity * UNIT_PRICE);
+      boxLabel.textContent =
+        quantity === 1 ? "1 Founder Box" : `${quantity} Founder Boxes`;
+    }
+
+    document.getElementById("decrease").addEventListener("click", () => {
+      quantity = Math.max(MIN_QUANTITY, quantity - 1);
+      updateDisplay();
+    });
+
+    document.getElementById("increase").addEventListener("click", () => {
+      quantity = Math.min(MAX_QUANTITY, quantity + 1);
+      updateDisplay();
+    });
+
+    document.getElementById("continue-button").addEventListener("click", () => {
+      panel.classList.add("open");
+      panel.setAttribute("aria-hidden", "false");
+      renderPayPal();
+      setTimeout(() => panel.scrollIntoView({ behavior: "smooth", block: "nearest" }), 50);
+    });
+
+    function renderPayPal() {
+      if (paypalRendered) return;
+
+      if (typeof paypal === "undefined") {
+        status.textContent =
+          "PayPal could not load. Confirm that YOUR_PAYPAL_CLIENT_ID was replaced in the code.";
+        return;
+      }
+
+      paypalRendered = true;
+
+      paypal.Buttons({
+        style: {
+          layout: "vertical",
+          shape: "pill",
+          label: "paypal"
+        },
+
+        createOrder(data, actions) {
+          const currentQuantity = quantity;
+          const total = (UNIT_PRICE * currentQuantity).toFixed(2);
+
+          return actions.order.create({
+            purchase_units: [{
+              description: `SHIFT Essential Founder Box × ${currentQuantity}`,
+              amount: {
+                currency_code: "USD",
+                value: total,
+                breakdown: {
+                  item_total: {
+                    currency_code: "USD",
+                    value: total
+                  }
+                }
+              },
+              items: [{
+                name: "SHIFT Essential Founder Box",
+                description: "Limited Founder Edition preorder",
+                unit_amount: {
+                  currency_code: "USD",
+                  value: UNIT_PRICE.toFixed(2)
+                },
+                quantity: String(currentQuantity),
+                category: "PHYSICAL_GOODS"
+              }]
+            }],
+            application_context: {
+              shipping_preference: "GET_FROM_FILE"
+            }
+          });
+        },
+
+        onApprove(data, actions) {
+          status.textContent = "Processing your order…";
+
+          return actions.order.capture().then((details) => {
+            const firstName =
+              details?.payer?.name?.given_name || "Founder";
+
+            status.innerHTML =
+              `<strong>Thank you, ${firstName}.</strong> Your payment was completed. ` +
+              `Save your PayPal confirmation for your records.`;
+
+            document.getElementById("continue-button").disabled = true;
+            document.getElementById("continue-button").textContent = "Order Completed";
+          });
+        },
+
+        onCancel() {
+          status.textContent =
+            "Checkout was canceled. Your quantity is still selected.";
+        },
+
+        onError(error) {
+          console.error(error);
+          status.textContent =
+            "Checkout could not be completed. Please try again or contact SHIFT support.";
+        }
+      }).render("#paypal-button-container");
+    }
+
+    updateDisplay();
+  </script>
+</body>
+</html>
