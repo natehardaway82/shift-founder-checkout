@@ -1,163 +1,137 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SHIFT Founder Box Checkout</title>
-  <script
-    src="https://www.paypal.com/sdk/js?client-id=BAAHeWvwMMsTh7kqkzHLKMSysYpRgUFsQztN3mGA1od2fQrJO3vU5n5K_-7O0UTUQSjnZkte2l6LQqSVfI&currency=USD&intent=capture"></script>
+
+  <script src="https://www.paypal.com/sdk/js?client-id=BAAHeWvwMMsTh7kqkzHLKMSysYpRgUFsQztN3mGA1od2fQrJO3vU5n5K_-7O0UTUQSjnZkte2l6LQqSVfI&currency=USD&intent=capture"></script>
+
   <style>
     :root {
-      --green: #1f9f4a;
+      --green: #137b36;
+      --green-bright: #1f9f4a;
+      --green-soft: #f2f8f3;
       --ink: #111;
-      --muted: #686868;
-      --line: #d9d7d1;
-      --soft: #f7f6f2;
-      --white: #fff
+      --muted: #666;
+      --line: #d8d6d0;
+      --soft: #faf9f6;
+      --white: #fff;
     }
 
-    * {
-      box-sizing: border-box
-    }
+    * { box-sizing: border-box; }
 
-    html,
-    body {
+    html, body {
       margin: 0;
       padding: 0;
       background: transparent;
       color: var(--ink);
-      font-family: Arial, Helvetica, sans-serif
+      font-family: Arial, Helvetica, sans-serif;
     }
 
-    body {
-      padding: 8px
-    }
+    body { padding: 10px; }
+
+    button, input { font: inherit; }
 
     .shell {
-      width: min(100%, 900px);
-      margin: 0 auto
-    }
-
-    .card,
-    .purchase,
-    .checkout {
+      width: min(100%, 980px);
+      margin: 0 auto;
       background: var(--white);
       border: 1px solid var(--line);
-      border-radius: 24px;
-      padding: 24px
+      border-radius: 28px;
+      padding: clamp(22px, 4vw, 42px);
     }
 
-    .eyebrow {
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .edition-badge {
       display: inline-flex;
-      margin-bottom: 10px;
-      padding: 7px 11px;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
       border-radius: 999px;
-      background: var(--soft);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .11em;
-      text-transform: uppercase
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .availability {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--ink);
+      font-size: 15px;
+    }
+
+    .availability strong { color: var(--green); }
+
+    .hero {
+      margin-top: 24px;
+      max-width: 590px;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(26px, 4vw, 42px);
-      line-height: 1.05;
-      letter-spacing: -.035em
-    }
-
-    .sub {
-      margin: 12px 0 0;
-      max-width: 700px;
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 1.55
-    }
-
-    .details {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 22px
-    }
-
-    .detail {
-      min-height: 82px;
-      padding: 15px;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: var(--soft)
-    }
-
-    .detail strong {
-      display: block;
-      margin-bottom: 5px;
-      font-size: 14px
-    }
-
-    .detail span {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.4
-    }
-
-    .purchase {
-      margin-top: 18px;
-      padding: 18px;
-      border-radius: 20px
-    }
-
-    .price-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      gap: 16px;
-      margin-bottom: 16px
-    }
-
-    .price-label {
-      color: var(--muted);
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      font-weight: 700
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(54px, 9vw, 88px);
+      line-height: .95;
+      letter-spacing: -.055em;
+      font-weight: 700;
     }
 
     .price {
-      margin-top: 3px;
-      font-size: 34px;
-      font-weight: 800
+      margin-top: 10px;
+      color: var(--green);
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(52px, 8vw, 76px);
+      line-height: 1;
+      font-weight: 700;
     }
 
-    .availability {
-      text-align: right;
-      font-size: 13px;
-      color: var(--muted)
+    .hero-copy {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.5;
     }
 
-    .availability strong {
-      display: block;
-      margin-top: 4px;
-      color: var(--ink);
-      font-size: 15px
+    .section {
+      margin-top: 34px;
     }
 
-    .purchase-row {
-      display: grid;
-      grid-template-columns: 260px 1fr;
-      gap: 12px
+    .section-title {
+      margin: 0 0 14px;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: .1em;
+      text-transform: uppercase;
     }
 
     .qty {
-      min-height: 66px;
-      border: 2px solid var(--ink);
-      border-radius: 999px;
+      width: min(100%, 370px);
+      min-height: 76px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1px 1fr 1px 1fr;
       align-items: center;
-      background: var(--soft);
-      overflow: hidden
+      background: var(--white);
+      overflow: hidden;
+    }
+
+    .qty-divider {
+      width: 1px;
+      height: 42px;
+      background: var(--line);
     }
 
     .qty button {
@@ -165,95 +139,264 @@
       border: 0;
       background: transparent;
       color: var(--ink);
-      font-size: 32px;
-      cursor: pointer
+      font-size: 34px;
+      cursor: pointer;
     }
 
-    .qty button:hover {
-      background: rgba(0, 0, 0, .05)
-    }
+    .qty button:hover { background: rgba(0,0,0,.035); }
 
     #quantity {
       text-align: center;
-      font-size: 23px;
-      font-weight: 800
-    }
-
-    .reserve {
-      min-height: 66px;
-      width: 100%;
-      border: 0;
-      border-radius: 999px;
-      padding: 14px 22px;
-      background: var(--green);
-      color: #fff;
-      font-size: 21px;
+      font-size: 28px;
       font-weight: 800;
-      cursor: pointer
     }
 
-    .reserve:hover {
-      filter: brightness(.95)
+    .divider {
+      height: 1px;
+      margin: 32px 0;
+      background: var(--line);
     }
 
-    .summary {
+    .delivery-heading {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 34px);
+      letter-spacing: -.03em;
+    }
+
+    .delivery-intro {
+      max-width: 630px;
+      margin: 10px 0 20px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.5;
+    }
+
+    .delivery-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .delivery-option {
+      position: relative;
+      min-height: 220px;
+      padding: 24px;
+      border: 1.5px solid var(--line);
+      border-radius: 20px;
+      background: var(--white);
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .delivery-option:hover { transform: translateY(-1px); }
+
+    .delivery-option.selected {
+      border-color: var(--green-bright);
+      background: var(--green-soft);
+      box-shadow: 0 8px 26px rgba(19,123,54,.08);
+    }
+
+    .delivery-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .radio {
+      width: 28px;
+      height: 28px;
+      border: 2px solid #7e7e7e;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #fff;
+    }
+
+    .selected .radio {
+      border-color: var(--green);
+    }
+
+    .selected .radio::after {
+      content: "";
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .delivery-content {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 18px;
+      align-items: center;
+      margin-top: 24px;
+    }
+
+    .delivery-icon {
+      display: grid;
+      place-items: center;
+      width: 66px;
+      height: 66px;
+      border-radius: 16px;
+      background: var(--soft);
+      font-size: 38px;
+    }
+
+    .selected .delivery-icon {
+      background: rgba(31,159,74,.08);
+    }
+
+    .delivery-title {
+      display: block;
+      font-size: 23px;
+      font-weight: 900;
+    }
+
+    .delivery-copy {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .delivery-cost {
+      display: block;
+      margin-top: 18px;
+      color: var(--ink);
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .selected .delivery-cost { color: var(--green); }
+
+    .order-title {
+      margin: 0 0 16px;
+      font-size: clamp(26px, 3.5vw, 32px);
+      letter-spacing: -.025em;
+    }
+
+    .order-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 22px;
+      background: var(--white);
+    }
+
+    .order-row {
       display: flex;
       justify-content: space-between;
-      gap: 12px;
-      margin-top: 13px;
-      color: var(--muted);
-      font-size: 14px
+      gap: 24px;
+      padding: 8px 0;
+      font-size: 17px;
     }
 
-    .summary strong {
-      color: var(--ink)
+    .order-row strong { text-align: right; }
+
+    .order-row.total {
+      margin-top: 14px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+      font-weight: 900;
     }
 
-    .trust {
+    .order-row.total strong {
+      font-size: 28px;
+    }
+
+    .free { color: var(--green); }
+
+    .reserve {
+      width: 100%;
+      min-height: 78px;
+      margin-top: 18px;
+      border: 0;
+      border-radius: 16px;
+      background: var(--green);
+      color: #fff;
+      font-size: clamp(20px, 3vw, 26px);
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(19,123,54,.18);
+    }
+
+    .reserve:hover { filter: brightness(.96); }
+
+    .reassurance {
       display: flex;
       justify-content: center;
-      gap: 18px;
-      flex-wrap: wrap;
-      margin-top: 15px;
+      gap: 8px;
+      margin-top: 16px;
       color: var(--muted);
-      font-size: 12px
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .reassurance strong { color: var(--ink); }
+
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      margin-top: 28px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--soft);
+    }
+
+    .trust-item {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      padding: 20px;
+      border-right: 1px solid var(--line);
+    }
+
+    .trust-item:last-child { border-right: 0; }
+
+    .trust-icon {
+      font-size: 26px;
+      color: var(--green);
+    }
+
+    .trust-item strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+
+    .trust-item span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
     }
 
     .checkout {
       display: none;
-      margin-top: 18px;
-      padding: 20px;
-      border-radius: 20px
+      margin-top: 22px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--white);
     }
 
     .checkout.open {
       display: block;
-      animation: reveal .25s ease-out
-    }
-
-    @keyframes reveal {
-      from {
-        opacity: 0;
-        transform: translateY(-8px)
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0)
-      }
+      animation: reveal .25s ease-out;
     }
 
     .checkout h2 {
-      margin: 0 0 7px;
+      margin: 0 0 8px;
       text-align: center;
-      font-size: 21px
+      font-size: 22px;
     }
 
     .panel-copy {
       margin: 0 0 16px;
       text-align: center;
       color: var(--muted);
-      font-size: 13px
+      font-size: 13px;
     }
 
     #status {
@@ -261,7 +404,7 @@
       margin-top: 12px;
       text-align: center;
       color: var(--muted);
-      font-size: 14px
+      font-size: 14px;
     }
 
     .terms {
@@ -269,22 +412,22 @@
       text-align: center;
       color: var(--muted);
       font-size: 11px;
-      line-height: 1.5
+      line-height: 1.5;
     }
 
     .success {
       display: none;
-      margin-top: 18px;
-      padding: clamp(28px, 6vw, 54px);
+      margin-top: 22px;
+      padding: clamp(30px, 6vw, 56px);
       border: 1px solid var(--line);
-      border-radius: 24px;
+      border-radius: 22px;
+      text-align: center;
       background: var(--white);
-      text-align: center
     }
 
     .success.open {
       display: block;
-      animation: reveal .35s ease-out
+      animation: reveal .35s ease-out;
     }
 
     .success-mark {
@@ -297,7 +440,7 @@
       background: var(--green);
       color: #fff;
       font-size: 38px;
-      font-weight: 800
+      font-weight: 800;
     }
 
     .success-eyebrow {
@@ -306,14 +449,14 @@
       font-size: 12px;
       font-weight: 800;
       letter-spacing: .12em;
-      text-transform: uppercase
+      text-transform: uppercase;
     }
 
     .success h2 {
       margin: 0;
       font-size: clamp(30px, 5vw, 48px);
       line-height: 1.05;
-      letter-spacing: -.035em
+      letter-spacing: -.035em;
     }
 
     .success-copy {
@@ -321,38 +464,30 @@
       margin: 15px auto 0;
       color: var(--muted);
       font-size: 16px;
-      line-height: 1.6
+      line-height: 1.6;
     }
 
-    .order-summary {
+    .success-summary {
       max-width: 560px;
       margin: 28px auto 0;
       overflow: hidden;
       border: 1px solid var(--line);
       border-radius: 18px;
-      text-align: left
+      text-align: left;
     }
 
-    .order-row {
+    .success-row {
       display: flex;
       justify-content: space-between;
       gap: 18px;
       padding: 15px 18px;
       border-bottom: 1px solid var(--line);
-      font-size: 14px
+      font-size: 14px;
     }
 
-    .order-row:last-child {
-      border-bottom: 0
-    }
-
-    .order-row span {
-      color: var(--muted)
-    }
-
-    .order-row strong {
-      text-align: right
-    }
+    .success-row:last-child { border-bottom: 0; }
+    .success-row span { color: var(--muted); }
+    .success-row strong { text-align: right; }
 
     .return-home {
       display: inline-flex;
@@ -366,46 +501,50 @@
       color: #fff;
       text-decoration: none;
       font-size: 16px;
-      font-weight: 800
+      font-weight: 800;
     }
 
-    .return-home:hover {
-      filter: brightness(.95)
+    .shell.order-complete > :not(.success) {
+      display: none !important;
     }
 
-    .shell.order-complete .card,
-    .shell.order-complete .purchase,
-    .shell.order-complete .checkout {
-      display: none
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    @media(max-width:700px) {
-      body {
-        padding: 4px
+    @media (max-width: 760px) {
+      body { padding: 4px; }
+
+      .shell {
+        padding: 20px;
+        border-radius: 20px;
       }
 
-      .card,
-      .purchase,
-      .checkout {
-        padding: 17px;
-        border-radius: 18px
+      .delivery-grid,
+      .trust-grid {
+        grid-template-columns: 1fr;
       }
 
-      .details {
-        grid-template-columns: 1fr
+      .trust-item {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
       }
 
-      .purchase-row {
-        grid-template-columns: 1fr
+      .trust-item:last-child { border-bottom: 0; }
+
+      .delivery-option { min-height: 200px; }
+
+      .topline {
+        align-items: flex-start;
       }
 
-      .price-row {
-        align-items: flex-start
+      .availability {
+        width: 100%;
       }
 
-      .qty,
-      .reserve {
-        min-height: 60px
+      .order-row {
+        font-size: 15px;
       }
     }
   </style>
@@ -413,114 +552,345 @@
 
 <body>
   <main class="shell">
-    <section class="card">
-      <div class="eyebrow">Founder Edition</div>
-      <h1>Be part of the first 250.</h1>
-      <p class="sub">Reserve the original SHIFT Essential Founder Box and help launch a new way to purchase everyday
-        essentials with greater purpose.</p>
-      <div class="details">
-        <div class="detail"><strong>Limited Release</strong><span>Only 250 Founder Boxes will be offered in the first
-            launch.</span></div>
-        <div class="detail"><strong>Local Delivery</strong><span>Free local delivery in the Philadelphia area.</span>
-        </div>
-        <div class="detail"><strong>Fulfillment Timing</strong><span>Ships or delivers in approximately 4–6
-            weeks.</span></div>
+    <div class="topline">
+      <div class="edition-badge">★ Founder Edition</div>
+      <div class="availability">📦 Only <strong>250</strong> Available</div>
+    </div>
+
+    <section class="hero">
+      <h1>Founder Box</h1>
+      <div class="price">$99</div>
+      <p class="hero-copy">The original SHIFT box. Curated essentials from Black American-owned businesses.</p>
+    </section>
+
+    <section class="section" aria-labelledby="quantity-heading">
+      <h2 id="quantity-heading" class="section-title">Choose Quantity</h2>
+      <div class="qty" aria-label="Quantity selector">
+        <button id="decrease" type="button" aria-label="Decrease quantity">−</button>
+        <span class="qty-divider" aria-hidden="true"></span>
+        <span id="quantity">1</span>
+        <span class="qty-divider" aria-hidden="true"></span>
+        <button id="increase" type="button" aria-label="Increase quantity">+</button>
       </div>
     </section>
-    <section class="purchase">
-      <div class="price-row">
-        <div>
-          <div class="price-label">Founder Box</div>
-          <div class="price">$99</div>
-        </div>
-        <div class="availability">Original launch<strong>250 boxes total</strong></div>
+
+    <div class="divider"></div>
+
+    <section aria-labelledby="delivery-heading">
+      <h2 id="delivery-heading" class="delivery-heading">How would you like to receive your Founder Box?</h2>
+      <p class="delivery-intro">We'll either hand-deliver it in the Philadelphia area or ship it anywhere in the United States.</p>
+
+      <div class="delivery-grid">
+        <label id="local-option" class="delivery-option selected">
+          <input type="radio" name="delivery" value="local" checked />
+          <span class="radio" aria-hidden="true"></span>
+
+          <span class="delivery-content">
+            <span class="delivery-icon" aria-hidden="true">🚚</span>
+            <span>
+              <span class="delivery-title">Free Local Delivery</span>
+              <span class="delivery-copy">Philadelphia area</span>
+              <span class="delivery-cost">Included</span>
+            </span>
+          </span>
+        </label>
+
+        <label id="shipping-option" class="delivery-option">
+          <input type="radio" name="delivery" value="shipping" />
+          <span class="radio" aria-hidden="true"></span>
+
+          <span class="delivery-content">
+            <span class="delivery-icon" aria-hidden="true">📦</span>
+            <span>
+              <span class="delivery-title">U.S. Shipping</span>
+              <span class="delivery-copy">Anywhere in the U.S.</span>
+              <span class="delivery-cost">Flat $15</span>
+            </span>
+          </span>
+        </label>
       </div>
-      <div class="purchase-row">
-        <div class="qty"><button id="decrease" type="button">−</button><span id="quantity">1</span><button id="increase"
-            type="button">+</button></div>
-        <button id="reserve-button" class="reserve" type="button">Reserve Founder Box</button>
-      </div>
-      <div class="summary"><span><strong id="box-label">1 Founder Box</strong></span><span>Total: <strong
-            id="total">$99.00</strong></span></div>
-      <div class="trust"><span>Secure checkout</span><span>Free Philadelphia-area delivery</span><span>Approximately 4–6
-          weeks</span></div>
     </section>
+
+    <div class="divider"></div>
+
+    <section aria-labelledby="order-heading">
+      <h2 id="order-heading" class="order-title">Your Founder Order</h2>
+
+      <div class="order-card">
+        <div class="order-row">
+          <span id="box-label">Founder Box × 1</span>
+          <strong id="box-subtotal">$99.00</strong>
+        </div>
+
+        <div class="order-row">
+          <span>Delivery</span>
+          <strong id="delivery-price" class="free">FREE</strong>
+        </div>
+
+        <div class="order-row total">
+          <span>Today's Total</span>
+          <strong id="total">$99.00</strong>
+        </div>
+      </div>
+
+      <button id="reserve-button" class="reserve" type="button">🔒 Secure My Founder Box</button>
+
+      <div class="reassurance">
+        <span>🛡️</span>
+        <span>No account required. Secure checkout powered by <strong>PayPal.</strong></span>
+      </div>
+
+      <div class="trust-grid">
+        <div class="trust-item">
+          <div class="trust-icon">🔒</div>
+          <div>
+            <strong>Secure Checkout</strong>
+            <span>Your payment is always safe and protected.</span>
+          </div>
+        </div>
+
+        <div class="trust-item">
+          <div class="trust-icon">🏅</div>
+          <div>
+            <strong>Limited Founder Edition</strong>
+            <span>Only 250 boxes will be available.</span>
+          </div>
+        </div>
+
+        <div class="trust-item">
+          <div class="trust-icon">🗓️</div>
+          <div>
+            <strong>Ships in 4–6 Weeks</strong>
+            <span>We're preparing each box with care.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="checkout-panel" class="checkout" aria-hidden="true">
       <h2>Complete your secure checkout</h2>
       <p class="panel-copy">Pay with PayPal, Pay Later, or a debit or credit card.</p>
       <div id="paypal-button-container"></div>
       <div id="status"></div>
-      <p class="terms">By placing an order, you acknowledge that this is a limited Founder Edition preorder expected to
-        ship or be delivered in approximately 4–6 weeks.</p>
+      <p class="terms">By placing an order, you acknowledge that this is a limited Founder Edition preorder expected to ship or be delivered in approximately 4–6 weeks.</p>
     </section>
 
     <section id="success-panel" class="success" aria-hidden="true">
       <div class="success-mark" aria-hidden="true">✓</div>
       <p class="success-eyebrow">Order confirmed</p>
       <h2>You're officially one of the first 250.</h2>
-      <p id="success-message" class="success-copy">Thank you for becoming a SHIFT Founder. Your order is confirmed, and
-        we'll keep you updated as your Founder Box is prepared.</p>
+      <p id="success-message" class="success-copy">Thank you for becoming a SHIFT Founder. Your order is confirmed, and we'll keep you updated as your Founder Box is prepared.</p>
 
-      <div class="order-summary" aria-label="Order summary">
-        <div class="order-row"><span>Order</span><strong id="success-order">SHIFT Essential Founder Box</strong></div>
-        <div class="order-row"><span>Quantity</span><strong id="success-quantity">1</strong></div>
-        <div class="order-row"><span>Total paid</span><strong id="success-total">$99.00</strong></div>
-        <div class="order-row"><span>Estimated fulfillment</span><strong>Approximately 4–6 weeks</strong></div>
+      <div class="success-summary" aria-label="Order summary">
+        <div class="success-row"><span>Order</span><strong id="success-order">SHIFT Essential Founder Box</strong></div>
+        <div class="success-row"><span>Quantity</span><strong id="success-quantity">1</strong></div>
+        <div class="success-row"><span>Delivery</span><strong id="success-delivery">Free local delivery</strong></div>
+        <div class="success-row"><span>Total paid</span><strong id="success-total">$99.00</strong></div>
+        <div class="success-row"><span>Estimated fulfillment</span><strong>Approximately 4–6 weeks</strong></div>
       </div>
 
       <a class="return-home" href="https://shiftessential.com">Return to SHIFT</a>
     </section>
   </main>
+
   <script>
-    const UNIT_PRICE = 99.00, MIN_QUANTITY = 1, MAX_QUANTITY = 5;
-    let quantity = 1, paypalRendered = false;
+    const UNIT_PRICE = 99;
+    const SHIPPING_FEE = 15;
+    const MIN_QUANTITY = 1;
+    const MAX_QUANTITY = 5;
+
+    let quantity = 1;
+    let deliveryMethod = 'local';
+    let paypalRendered = false;
 
     const shell = document.querySelector('.shell');
     const quantityDisplay = document.getElementById('quantity');
-    const totalDisplay = document.getElementById('total');
     const boxLabel = document.getElementById('box-label');
+    const boxSubtotal = document.getElementById('box-subtotal');
+    const deliveryPrice = document.getElementById('delivery-price');
+    const totalDisplay = document.getElementById('total');
     const checkoutPanel = document.getElementById('checkout-panel');
     const successPanel = document.getElementById('success-panel');
     const successMessage = document.getElementById('success-message');
     const successOrder = document.getElementById('success-order');
     const successQuantity = document.getElementById('success-quantity');
+    const successDelivery = document.getElementById('success-delivery');
     const successTotal = document.getElementById('success-total');
     const status = document.getElementById('status');
     const reserveButton = document.getElementById('reserve-button');
-    function money(v) { return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(v) }
-    function updateDisplay() { quantityDisplay.textContent = quantity; totalDisplay.textContent = money(quantity * UNIT_PRICE); boxLabel.textContent = quantity === 1 ? '1 Founder Box' : `${quantity} Founder Boxes` }
-    document.getElementById('decrease').addEventListener('click', () => { quantity = Math.max(MIN_QUANTITY, quantity - 1); updateDisplay() });
-    document.getElementById('increase').addEventListener('click', () => { quantity = Math.min(MAX_QUANTITY, quantity + 1); updateDisplay() });
-    reserveButton.addEventListener('click', () => { checkoutPanel.classList.add('open'); checkoutPanel.setAttribute('aria-hidden', 'false'); renderPayPal(); setTimeout(() => checkoutPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80) });
-    function renderPayPal() { if (paypalRendered) return; if (typeof paypal === 'undefined') { status.textContent = 'PayPal could not load. Confirm that YOUR_PAYPAL_CLIENT_ID was replaced in the file.'; return } paypalRendered = true; paypal.Buttons({ style: { layout: 'vertical', shape: 'pill', label: 'paypal' }, createOrder(data, actions) { const q = quantity, total = (UNIT_PRICE * q).toFixed(2); return actions.order.create({ purchase_units: [{ description: `SHIFT Essential Founder Box × ${q}`, amount: { currency_code: 'USD', value: total, breakdown: { item_total: { currency_code: 'USD', value: total } } }, items: [{ name: 'SHIFT Essential Founder Box', description: 'Limited Founder Edition preorder', unit_amount: { currency_code: 'USD', value: UNIT_PRICE.toFixed(2) }, quantity: String(q), category: 'PHYSICAL_GOODS' }] }], application_context: { shipping_preference: 'GET_FROM_FILE' } }) }, onApprove(data, actions) {
-      status.textContent = 'Processing your order…';
+    const localOption = document.getElementById('local-option');
+    const shippingOption = document.getElementById('shipping-option');
 
-      return actions.order.capture().then(details => {
-        const firstName = details?.payer?.name?.given_name || 'Founder';
-        const purchasedQuantity = quantity;
-        const paidTotal = purchasedQuantity * UNIT_PRICE;
+    function money(value) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+      }).format(value);
+    }
 
-        successMessage.textContent =
-          `Thank you, ${firstName}. Your payment was completed successfully. Your Founder Box order is confirmed, and we'll keep you updated as it is prepared.`;
-        successOrder.textContent = purchasedQuantity === 1
-          ? 'SHIFT Essential Founder Box'
-          : `SHIFT Essential Founder Boxes × ${purchasedQuantity}`;
-        successQuantity.textContent = String(purchasedQuantity);
-        successTotal.textContent = money(paidTotal);
+    function shippingCost() {
+      return deliveryMethod === 'shipping' ? SHIPPING_FEE : 0;
+    }
 
-        reserveButton.disabled = true;
-        reserveButton.textContent = 'Order Completed';
-        shell.classList.add('order-complete');
-        successPanel.classList.add('open');
-        successPanel.setAttribute('aria-hidden', 'false');
+    function orderTotal() {
+      return (quantity * UNIT_PRICE) + shippingCost();
+    }
 
-        setTimeout(() => {
-          successPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 80);
-      });
-    }, onCancel() { status.textContent = 'Checkout was canceled. Your selected quantity is still saved.' }, onError(error) { console.error(error); status.textContent = 'Checkout could not be completed. Please try again.' } }).render('#paypal-button-container') }
+    function updateDisplay() {
+      const subtotal = quantity * UNIT_PRICE;
+
+      quantityDisplay.textContent = quantity;
+      boxLabel.textContent = `Founder Box × ${quantity}`;
+      boxSubtotal.textContent = money(subtotal);
+      totalDisplay.textContent = money(orderTotal());
+
+      if (deliveryMethod === 'local') {
+        deliveryPrice.textContent = 'FREE';
+        deliveryPrice.classList.add('free');
+      } else {
+        deliveryPrice.textContent = money(SHIPPING_FEE);
+        deliveryPrice.classList.remove('free');
+      }
+    }
+
+    function setDelivery(method) {
+      deliveryMethod = method;
+      localOption.classList.toggle('selected', method === 'local');
+      shippingOption.classList.toggle('selected', method === 'shipping');
+      updateDisplay();
+    }
+
+    document.getElementById('decrease').addEventListener('click', () => {
+      quantity = Math.max(MIN_QUANTITY, quantity - 1);
+      updateDisplay();
+    });
+
+    document.getElementById('increase').addEventListener('click', () => {
+      quantity = Math.min(MAX_QUANTITY, quantity + 1);
+      updateDisplay();
+    });
+
+    document.querySelectorAll('input[name="delivery"]').forEach(input => {
+      input.addEventListener('change', event => setDelivery(event.target.value));
+    });
+
+    reserveButton.addEventListener('click', () => {
+      checkoutPanel.classList.add('open');
+      checkoutPanel.setAttribute('aria-hidden', 'false');
+      renderPayPal();
+
+      setTimeout(() => {
+        checkoutPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 80);
+    });
+
+    function renderPayPal() {
+      if (paypalRendered) return;
+
+      if (typeof paypal === 'undefined') {
+        status.textContent = 'PayPal could not load. Please refresh the page and try again.';
+        return;
+      }
+
+      paypalRendered = true;
+
+      paypal.Buttons({
+        style: {
+          layout: 'vertical',
+          shape: 'pill',
+          label: 'paypal'
+        },
+
+        createOrder(data, actions) {
+          const subtotal = quantity * UNIT_PRICE;
+          const shipping = shippingCost();
+          const total = subtotal + shipping;
+          const deliveryDescription = deliveryMethod === 'local'
+            ? 'Free local delivery — Philadelphia area'
+            : 'U.S. flat-rate shipping';
+
+          return actions.order.create({
+            purchase_units: [{
+              description: `SHIFT Essential Founder Box × ${quantity}`,
+              amount: {
+                currency_code: 'USD',
+                value: total.toFixed(2),
+                breakdown: {
+                  item_total: {
+                    currency_code: 'USD',
+                    value: subtotal.toFixed(2)
+                  },
+                  shipping: {
+                    currency_code: 'USD',
+                    value: shipping.toFixed(2)
+                  }
+                }
+              },
+              items: [{
+                name: 'SHIFT Essential Founder Box',
+                description: `Limited Founder Edition preorder — ${deliveryDescription}`,
+                unit_amount: {
+                  currency_code: 'USD',
+                  value: UNIT_PRICE.toFixed(2)
+                },
+                quantity: String(quantity),
+                category: 'PHYSICAL_GOODS'
+              }]
+            }],
+            application_context: {
+              shipping_preference: 'GET_FROM_FILE'
+            }
+          });
+        },
+
+        onApprove(data, actions) {
+          status.textContent = 'Processing your order…';
+
+          return actions.order.capture().then(details => {
+            const firstName = details?.payer?.name?.given_name || 'Founder';
+            const purchasedQuantity = quantity;
+            const paidTotal = orderTotal();
+            const deliveryText = deliveryMethod === 'local'
+              ? 'Free local delivery — Philadelphia area'
+              : 'U.S. shipping — $15 per order';
+
+            successMessage.textContent =
+              `Thank you, ${firstName}. Your payment was completed successfully. Your Founder Box order is confirmed, and we'll keep you updated as it is prepared.`;
+
+            successOrder.textContent = purchasedQuantity === 1
+              ? 'SHIFT Essential Founder Box'
+              : `SHIFT Essential Founder Boxes × ${purchasedQuantity}`;
+
+            successQuantity.textContent = String(purchasedQuantity);
+            successDelivery.textContent = deliveryText;
+            successTotal.textContent = money(paidTotal);
+
+            reserveButton.disabled = true;
+            reserveButton.textContent = 'Order Completed';
+
+            shell.classList.add('order-complete');
+            successPanel.classList.add('open');
+            successPanel.setAttribute('aria-hidden', 'false');
+
+            setTimeout(() => {
+              successPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 80);
+          });
+        },
+
+        onCancel() {
+          status.textContent = 'Checkout was canceled. Your quantity and delivery selection are still saved.';
+        },
+
+        onError(error) {
+          console.error(error);
+          status.textContent = 'Checkout could not be completed. Please try again.';
+        }
+      }).render('#paypal-button-container');
+    }
+
     updateDisplay();
   </script>
 </body>
-
 </html>
+
