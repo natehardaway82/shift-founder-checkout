@@ -269,6 +269,18 @@
 
     .selected .delivery-cost { color: var(--green); }
 
+
+    .zip-check {
+      margin-top: 18px; padding: 18px; border: 1px solid var(--line); border-radius: 16px; background: var(--soft);
+    }
+    .zip-check label { display:block; font-weight:800; margin-bottom:8px; }
+    .zip-row { display:flex; gap:10px; align-items:stretch; }
+    .zip-row input { flex:1; min-width:0; padding:13px 14px; border:1px solid var(--line); border-radius:12px; font-size:16px; }
+    .zip-row button { border:0; border-radius:12px; padding:0 18px; background:var(--ink); color:#fff; font-weight:800; cursor:pointer; }
+    .zip-result { min-height:20px; margin-top:10px; font-size:14px; line-height:1.4; }
+    .zip-result.good { color:var(--green); font-weight:800; }
+    .zip-result.bad { color:#9b2c2c; font-weight:800; }
+
     .order-title {
       margin: 0 0 16px;
       font-size: clamp(26px, 3.5vw, 32px);
@@ -572,13 +584,22 @@
         <span class="qty-divider" aria-hidden="true"></span>
         <button id="increase" type="button" aria-label="Increase quantity">+</button>
       </div>
+
+      <div id="zip-check" class="zip-check">
+        <label for="delivery-zip">Check Personal Delivery availability</label>
+        <div class="zip-row">
+          <input id="delivery-zip" type="text" inputmode="numeric" maxlength="5" autocomplete="postal-code" placeholder="Enter 5-digit ZIP code" aria-describedby="zip-result" />
+          <button id="check-zip" type="button">Check ZIP</button>
+        </div>
+        <div id="zip-result" class="zip-result" aria-live="polite">Personal Delivery is $9.99 in approved Founder 250 ZIP codes.</div>
+      </div>
     </section>
 
     <div class="divider"></div>
 
     <section aria-labelledby="delivery-heading">
       <h2 id="delivery-heading" class="delivery-heading">How would you like to receive your Founder Box?</h2>
-      <p class="delivery-intro">Choose personal delivery in the Philadelphia area or shipping anywhere in the United States.</p>
+      <p class="delivery-intro">We’re starting local. For our first 250 Founder Boxes, Personal Delivery is available in select Delaware, Philadelphia, Pennsylvania suburbs, and South Jersey communities. Enter your ZIP code to check availability.</p>
 
       <div class="delivery-grid">
         <label id="local-option" class="delivery-option selected">
@@ -589,7 +610,7 @@
             <span class="delivery-icon" aria-hidden="true">🚚</span>
             <span>
               <span class="delivery-title">Personal Delivery</span>
-              <span class="delivery-copy">Philadelphia area</span>
+              <span class="delivery-copy">Select Delaware, Philadelphia, PA suburbs & South Jersey</span>
               <span class="delivery-cost">$9.99</span>
             </span>
           </span>
@@ -603,8 +624,8 @@
             <span class="delivery-icon" aria-hidden="true">📦</span>
             <span>
               <span class="delivery-title">U.S. Shipping</span>
-              <span class="delivery-copy">Anywhere in the U.S.</span>
-              <span class="delivery-cost">Flat $17.99</span>
+              <span class="delivery-copy">Available outside our Personal Delivery area</span>
+              <span class="delivery-cost">Flat $49.99</span>
             </span>
           </span>
         </label>
@@ -665,8 +686,8 @@
         <div class="trust-item">
           <div class="trust-icon">🗓️</div>
           <div>
-            <strong>Ships in 4–6 Weeks</strong>
-            <span>We're preparing each box with care.</span>
+            <strong>Packed With Care</strong>
+            <span>Founder Boxes are prepared in small batches. Delivery timing may vary by location.</span>
           </div>
         </div>
       </div>
@@ -677,7 +698,7 @@
       <p class="panel-copy">Pay with PayPal, Pay Later, or a debit or credit card.</p>
       <div id="paypal-button-container"></div>
       <div id="status"></div>
-      <p class="terms">By placing an order, you acknowledge that this is a limited Founder Edition preorder expected to ship or be delivered in approximately 4–6 weeks.</p>
+      <p class="terms">By placing an order, you acknowledge that this is a limited Founder Edition preorder. Founder Boxes are prepared in small batches, and fulfillment timing may vary by location.</p>
     </section>
 
     <section id="success-panel" class="success" aria-hidden="true">
@@ -692,7 +713,7 @@
         <div class="success-row"><span>Sales Tax</span><strong id="success-tax">$7.92</strong></div>
         <div class="success-row"><span>Delivery</span><strong id="success-delivery">Personal Delivery — $9.99</strong></div>
         <div class="success-row"><span>Total paid</span><strong id="success-total">$116.91</strong></div>
-        <div class="success-row"><span>Estimated fulfillment</span><strong>Approximately 4–6 weeks</strong></div>
+        <div class="success-row"><span>Fulfillment</span><strong>Packed with care — timing varies by location</strong></div>
       </div>
 
       <a class="return-home" href="https://shiftessential.com">Return to SHIFT</a>
@@ -703,13 +724,39 @@
     const UNIT_PRICE = 99;
     const SALES_TAX_PER_BOX = 7.92;
     const PERSONAL_DELIVERY_FEE = 9.99;
-    const SHIPPING_FEE = 17.99;
+    const SHIPPING_FEE = 49.99;
     const MIN_QUANTITY = 1;
     const MAX_QUANTITY = 5;
+
+    // Founder 250 Personal Delivery whitelist — standard residential ZIP codes only.
+    // Organized around Dover → Delaware corridor → Philadelphia → selected PA suburbs → South Jersey.
+    const PERSONAL_DELIVERY_ZIPS = new Set([
+      // Central Delaware / Dover corridor
+      '19901','19904','19934','19936','19943','19946','19952','19953','19962','19963','19977','19979','19980',
+      // New Castle County / northbound Delaware corridor
+      '19701','19702','19703','19706','19707','19709','19710','19711','19713','19720','19730','19731','19733','19734','19735','19736',
+      '19801','19802','19803','19804','19805','19806','19807','19808','19809','19810',
+      // Philadelphia — standard residential ZIPs
+      '19102','19103','19104','19106','19107','19109','19110','19111','19112','19113','19114','19115','19116','19118','19119','19120','19121','19122','19123','19124','19125','19126','19127','19128','19129','19130','19131','19132','19133','19134','19135','19136','19137','19138','19139','19140','19141','19142','19143','19144','19145','19146','19147','19148','19149','19150','19151','19152','19153','19154',
+      // Delaware County / Main Line / southwest PA
+      '19003','19008','19010','19013','19014','19015','19017','19018','19020','19022','19023','19025','19026','19027','19029','19030','19031','19032','19033','19035','19036','19037','19038','19039','19041','19043','19046','19050','19053','19054','19055','19056','19057','19060','19061','19063','19064','19066','19067','19070','19072','19073','19074','19075','19076','19078','19079','19081','19082','19083','19085','19086','19087','19094','19095','19096',
+      // Montgomery / Bucks — expanded north & northwest boundary
+      '18914','18929','18940','18954','18966','18974','18976','18977','18980','19001','19002','19006','19009','19012','19034','19040','19044','19047','19053','19056','19067','19090','19095','19401','19403','19406','19422','19426','19428','19436','19437','19438','19440','19444','19446','19454','19462','19468','19473','19477','19486',
+      // Paoli / Malvern western boundary and nearby corridor
+      '19301','19312','19333','19355','19380','19382',
+      // Camden County / immediate South Jersey
+      '08002','08003','08007','08009','08012','08021','08026','08029','08030','08031','08033','08034','08035','08043','08045','08049','08059','08078','08081','08083','08084','08091','08095','08102','08103','08104','08105','08106','08107','08108','08109','08110',
+      // Gloucester County / southwest South Jersey
+      '08020','08027','08028','08032','08039','08051','08056','08061','08062','08063','08066','08071','08080','08085','08086','08090','08093','08094','08096','08097',
+      // Salem County corridor
+      '08023','08038','08067','08069','08070','08072','08079','08098','08318','08347'
+    ]);
+
 
     let quantity = 1;
     let deliveryMethod = 'local';
     let paypalRendered = false;
+    let verifiedPersonalDeliveryZip = '';
 
     const shell = document.querySelector('.shell');
     const quantityDisplay = document.getElementById('quantity');
@@ -730,6 +777,9 @@
     const reserveButton = document.getElementById('reserve-button');
     const localOption = document.getElementById('local-option');
     const shippingOption = document.getElementById('shipping-option');
+    const deliveryZip = document.getElementById('delivery-zip');
+    const checkZipButton = document.getElementById('check-zip');
+    const zipResult = document.getElementById('zip-result');
 
     function money(value) {
       return new Intl.NumberFormat('en-US', {
@@ -766,12 +816,51 @@
         : 'U.S. Shipping';
     }
 
+
+    function normalizeZip(value) {
+      const match = String(value || '').trim().match(/^(\d{5})(?:-\d{4})?$/);
+      return match ? match[1] : '';
+    }
+
+    function checkPersonalDeliveryZip({autoSwitch = true} = {}) {
+      const zip = normalizeZip(deliveryZip.value);
+      zipResult.classList.remove('good','bad');
+
+      if (!zip) {
+        verifiedPersonalDeliveryZip = '';
+        zipResult.textContent = 'Please enter a valid 5-digit ZIP code.';
+        zipResult.classList.add('bad');
+        return false;
+      }
+
+      if (PERSONAL_DELIVERY_ZIPS.has(zip)) {
+        verifiedPersonalDeliveryZip = zip;
+        zipResult.textContent = '✓ Personal Delivery is available in ' + zip + ' for $9.99.';
+        zipResult.classList.add('good');
+        return true;
+      }
+
+      verifiedPersonalDeliveryZip = '';
+      zipResult.textContent = 'Personal Delivery is not available in ' + zip + ' yet. Nationwide Shipping is available for $49.99.';
+      zipResult.classList.add('bad');
+      if (autoSwitch) {
+        document.querySelector('input[name="delivery"][value="shipping"]').checked = true;
+        setDelivery('shipping');
+      }
+      return false;
+    }
+
     function setDelivery(method) {
       deliveryMethod = method;
       localOption.classList.toggle('selected', method === 'local');
       shippingOption.classList.toggle('selected', method === 'shipping');
       updateDisplay();
+      if (method === 'local' && verifiedPersonalDeliveryZip && !PERSONAL_DELIVERY_ZIPS.has(verifiedPersonalDeliveryZip)) verifiedPersonalDeliveryZip = '';
     }
+
+    checkZipButton.addEventListener('click', () => checkPersonalDeliveryZip());
+    deliveryZip.addEventListener('input', () => { verifiedPersonalDeliveryZip = ''; zipResult.classList.remove('good','bad'); zipResult.textContent = 'Click Check ZIP to confirm Personal Delivery availability.'; });
+    deliveryZip.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); checkPersonalDeliveryZip(); } });
 
     document.getElementById('decrease').addEventListener('click', () => {
       quantity = Math.max(MIN_QUANTITY, quantity - 1);
@@ -788,6 +877,10 @@
     });
 
     reserveButton.addEventListener('click', () => {
+      if (deliveryMethod === 'local' && !checkPersonalDeliveryZip({autoSwitch:false})) {
+        deliveryZip.focus();
+        return;
+      }
       checkoutPanel.classList.add('open');
       checkoutPanel.setAttribute('aria-hidden', 'false');
       renderPayPal();
@@ -820,8 +913,8 @@
           const delivery = deliveryCost();
           const total = subtotal + tax + delivery;
           const deliveryDescription = deliveryMethod === 'local'
-            ? 'Personal Delivery — Philadelphia area'
-            : 'U.S. flat-rate shipping';
+            ? 'Personal Delivery — approved Founder 250 delivery area'
+            : 'U.S. flat-rate shipping — $49.99';
 
           return actions.order.create({
             purchase_units: [{
@@ -864,13 +957,23 @@
         onApprove(data, actions) {
           status.textContent = 'Processing your order…';
 
-          return actions.order.capture().then(details => {
+          return actions.order.get().then(orderDetails => {
+            const paypalZip = normalizeZip(orderDetails?.purchase_units?.[0]?.shipping?.address?.postal_code || '');
+            if (deliveryMethod === 'local' && (!paypalZip || !PERSONAL_DELIVERY_ZIPS.has(paypalZip))) {
+              status.textContent = 'The PayPal delivery ZIP is outside our Personal Delivery area. Please select U.S. Shipping and try checkout again.';
+              document.querySelector('input[name="delivery"][value="shipping"]').checked = true;
+              setDelivery('shipping');
+              verifiedPersonalDeliveryZip = '';
+              throw new Error('PERSONAL_DELIVERY_ZIP_MISMATCH');
+            }
+            return actions.order.capture();
+          }).then(details => {
             const firstName = details?.payer?.name?.given_name || 'Founder';
             const purchasedQuantity = quantity;
             const paidTotal = orderTotal();
             const deliveryText = deliveryMethod === 'local'
               ? 'Personal Delivery — $9.99'
-              : 'U.S. Shipping — $17.99';
+              : 'U.S. Shipping — $49.99';
 
             successMessage.textContent =
               `Thank you, ${firstName}. Your payment was completed successfully. Your Founder Box order is confirmed, and we'll keep you updated as it is prepared.`;
@@ -903,6 +1006,7 @@
 
         onError(error) {
           console.error(error);
+          if (String(error).includes('PERSONAL_DELIVERY_ZIP_MISMATCH')) return;
           status.textContent = 'Checkout could not be completed. Please try again.';
         }
       }).render('#paypal-button-container');
